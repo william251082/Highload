@@ -51,19 +51,23 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= 'Username: ' . $decodedUsername; ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'username',
-            'auth_key',
-            'password_hash',
-            'password_reset_token',
-            'email:email',
-            'status',
-            'created_at',
-            'updated_at',
-        ],
-    ]) ?>
+    <?php if ($this->beginCache('user-details', ['variations' => $model->id])) {
+        echo DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'id',
+                'username',
+                'auth_key',
+                'password_hash',
+                'password_reset_token',
+                'email:email',
+                'status',
+                'created_at',
+                'updated_at',
+            ],
+        ]);
+        Yii::trace('store user details to table to log');
+        $this->endCache();
+    } ?>
 
 </div>

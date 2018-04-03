@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use common\models\User;
 use common\models\UserSearch;
+use yii\db\Query;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,33 @@ class UserController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            [
+                'class' => 'yii\filters\PageCache',
+                'only' => ['view'],
+                'duration' => 60,
+                'variations' => [
+                    \Yii::$app->request->get('id'),
+                ],
+                'dependency' => [
+                    'class' => 'yii\caching\DbDependency',
+                    'sql' => 'SELECT updated_at FROM user WHERE id = :id',
+                    'params' => [':id' => \Yii::$app->request->get('id')],
+                ],
+            ],
+            [
+                'class' => 'yii\filters\HttpCache',
+                'only' => ['view'],
+                'lastModified' => function ($action, $params) {
+                    $q = new Query();
+                    return $q
+                        ->select('updated_at')
+                        ->from('user')
+                        ->where('id = :id', [
+                            ':id' => Yii::$app->request->get('id')
+                        ])
+                        ->scalar();
+                },
             ],
         ];
     }

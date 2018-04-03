@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
+/* @var $key string */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
@@ -30,7 +31,24 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <p>
-        <?= 'Username:' . Html::encode($model->username); ?>
+        <?php $escapedUsername = Html::encode($model->username); ?>
+        <?= 'Username:' . $escapedUsername; ?>
+    </p>
+
+    <p>
+        <?= 'Key: ' . $key; ?>
+    </p>
+
+    <p>
+        <?php $encodedUsername = Yii::$app->security->encryptByKey(
+                $escapedUsername, $key); ?>
+        <?= 'Username: ' . $encodedUsername; ?>
+    </p>
+
+    <p>
+        <?php $decodedUsername = Yii::$app->security->decryptByKey(
+            $escapedUsername, $key); ?>
+        <?= 'Username: ' . $decodedUsername; ?>
     </p>
 
     <?= DetailView::widget([

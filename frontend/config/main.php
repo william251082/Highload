@@ -36,6 +36,9 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'assetManager' => [
+          'bundles' => require(__DIR__ . '/assets-prod.php'),
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

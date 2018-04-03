@@ -3,6 +3,8 @@ namespace frontend\models;
 
 use yii\base\Model;
 use common\models\User;
+use yii\helpers\Html;
+use yii\helpers\HtmlPurifier;
 
 /**
  * Signup form
@@ -48,7 +50,7 @@ class SignupForm extends Model
         }
         
         $user = new User();
-        $user->username = $this->username;
+        $user->username = HtmlPurifier::process($this->username);
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();

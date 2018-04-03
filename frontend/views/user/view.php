@@ -40,13 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
     <p>
-        <?php $encodedUsername = Yii::$app->security->encryptByKey(
+        <?php $encodedUsername = Yii::$app->security->encryptByPassword(
                 $escapedUsername, $key); ?>
         <?= 'Username: ' . $encodedUsername; ?>
     </p>
 
     <p>
-        <?php $decodedUsername = Yii::$app->security->decryptByKey(
+        <?php $decodedUsername = Yii::$app->security->decryptByPassword(
             $escapedUsername, $key); ?>
         <?= 'Username: ' . $decodedUsername; ?>
     </p>
